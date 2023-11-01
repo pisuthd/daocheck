@@ -2,6 +2,7 @@
 
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import Protected from '@/components/Protected'
 
 export default function Home() {
   return (
@@ -10,7 +11,9 @@ export default function Home() {
     >
       <Header />
 
-      SETTINGS
+      <Protected>
+        SETTINGS
+      </Protected>
 
       <Footer />
     </main>
