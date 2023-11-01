@@ -1,8 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useConnectWallet } from '@web3-onboard/react'
+import { Puff } from 'react-loading-icons'
+
 
 const Header = () => {
+
+    const [{ wallet, connecting }, connect, disconnect] = useConnectWallet()
 
     const router = useRouter()
 
@@ -36,8 +41,10 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-            <div className='py-2 col-span-1'>
-                Connect Wallet
+            <div className='py-2 col-span-1 flex'>
+                <button disabled={connecting} onClick={() => (wallet ? disconnect(wallet) : connect())} class={`${wallet ? "bg-transparent border" : "bg-blue-700"} ml-auto mr-2  text-white text-sm py-2 px-8 rounded-md`}>
+                    {connecting ? <><Puff stroke="#ffffff" style={{ height: "18px", width: "18px" }} className='mx-10' /></> : wallet ? 'Disconnect' : 'Connect Wallet'}
+                </button>
             </div>
 
         </nav>
