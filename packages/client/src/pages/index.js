@@ -2,6 +2,7 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Protected from '@/components/Protected'
+import AllDao from '@/components/overview/AllDao'
 
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
       <Header />
 
       <Protected>
-        OVERVIEW
+        <AllDao/>
       </Protected>
 
       <Footer />
