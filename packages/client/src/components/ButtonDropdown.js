@@ -18,7 +18,7 @@ const ButtonDropdown = ({
     return (
         <Menu as="div" className="relative inline-block mb-2 text-left">
             <div className='p-2 pb-1'>
-                <Menu.Button className=" inline-flex w-full justify-center gap-x-1.5 rounded-md bg-cyan-500 py-2 px-8   font-semibold text-white     ">
+                <Menu.Button className=" inline-flex w-full justify-center gap-x-1.5 rounded-md bg-black py-2 px-8   font-medium text-white     ">
                     {title}
                     <ChevronDown aria-hidden="true" class="ml-2" />
                 </Menu.Button>
@@ -43,8 +43,8 @@ const ButtonDropdown = ({
                                             <Link
                                                 href={links[index]}
                                                 className={classNames(
-                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                    'block px-4 py-2 text-sm'
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-800',
+                                                    'block px-4 py-2 font-medium text-sm'
                                                 )}
                                             >
                                                 {item}

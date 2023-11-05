@@ -1,4 +1,4 @@
-import '@/styles/globals.css'
+import '@/styles/globals.css' 
 import { Web3OnboardProvider, init } from '@web3-onboard/react'
 import injectedModule from '@web3-onboard/injected-wallets'
 

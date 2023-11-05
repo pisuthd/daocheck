@@ -7,12 +7,12 @@ import ButtonDropdown from '../ButtonDropdown'
 
 
 const NoDAO = () => (
-    <div class="rounded-lg h-[300px] border-2 border-gray-600 flex w-full p-6 py-6 m-1 bg-gray-900 ">
+    <div class="rounded-lg h-[300px] border-2 border-gray-600 flex w-full p-6 py-6 m-1 bg-white ">
         <div className="text-center max-w-sm m-auto">
             <h2 className=" text-2xl font-bold">
                 No DAO Found
             </h2>
-            <p className="text-sm my-2 text-gray-400">
+            <p className="text-sm my-2 font-medium text-neutral-800">
                 No DAO is made or managed by your account. Please proceed to set up a new one.
             </p>
 
@@ -29,8 +29,8 @@ const AllDao = () => {
 
             <ButtonDropdown
                 title="Setup New..."
-                items={["DAO", "Token"]}
-                links={["/new/dao", "/new/token"]}
+                items={["Parent DAO", "Child DAO"]}
+                links={["/new/dao?type=parent", "/new/dao?type=child"]}
             />
             <NoDAO
 
@@ -38,7 +38,7 @@ const AllDao = () => {
 
             {/* DISCLAIMER */}
 
-            <div className='max-w-lg ml-auto mr-auto text-sm mt-4 text-center text-neutral-400'>
+            <div className='max-w-lg ml-auto mr-auto text-sm mt-4 text-center font-medium text-neutral-600'>
             You're using a development version that is available only on the zKatana Testnet. Please note that some functions may not work as intended.
             </div>
 

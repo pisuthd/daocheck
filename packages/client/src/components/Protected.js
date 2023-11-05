@@ -8,16 +8,16 @@ const Protected = ({ children }) => {
 
     if (!wallet || wallet && wallet.chains[0] && wallet.chains[0].id !== "0x133e40" ) {
         return (
-            <div class="rounded-lg h-[300px] border-2 border-gray-600 ml-auto mr-auto max-w-2xl flex w-full p-6 py-6 m-1 mb-20 bg-gray-900 ">
+            <div class="rounded-lg h-[300px] border-2 border-gray-600 ml-auto mr-auto max-w-2xl flex w-full p-6 py-6 m-1 mb-20 bg-white ">
 
                 <div className="text-center max-w-sm m-auto">
                     <h2 className=" text-2xl font-bold">
                         Wrong Network
                     </h2>
-                    <p className="text-sm my-2 text-gray-400">
+                    <p className="text-sm my-2 text-neutral-600">
                         We're unable to see that you have connected any Web3 wallet on the following network:
                     </p>
-                    <div class="w-full mb-1 bg-gray-800 rounded-lg border-2 border-gray-600 ml-auto mr-auto grid grid-cols-4 p-2 mt-4 gap-3 text-lg">
+                    <div class="w-full mb-1 bg-neutral-100 rounded-lg border-2 border-gray-600 ml-auto mr-auto grid grid-cols-4 p-2 mt-4 gap-3 text-lg">
                         <div className="col-span-1 py-1 px-2">
                             <Image
                                 src="/astar-logo.png"
@@ -30,17 +30,15 @@ const Protected = ({ children }) => {
                             <div className="mt-auto">
                                 zKatana Testnet
                             </div>
-                            <div className="text-xs p-0 m-0  text-gray-400 mb-auto">
+                            <div className="text-xs p-0 m-0  text-neutral-600 mb-auto">
                                 Chain ID: 1261120
                             </div> 
                         </div>
                     </div>
-                    <a href="https://docs.astar.network/docs/build/zkEVM/quickstart" target="_blank" className="text-xs underline my-2 text-gray-400">
+                    <a href="https://docs.astar.network/docs/build/zkEVM/quickstart" target="_blank" className="text-xs underline my-2 text-neutral-800">
                         How to connect
                     </a>
                 </div>
-
-
             </div>
         )
     }
