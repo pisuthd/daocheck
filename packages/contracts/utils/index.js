@@ -30,3 +30,7 @@ exports.hasher = async (items) => {
     const preImage = hashed.reduce((sum, x) => sum + x, 0n);
     return poseidon.F.toObject(poseidon([preImage]))
 }
+
+exports.hashCommitment = async (daoId, secret) => {
+    return this.hasher([`${daoId}`, `${secret}`])
+}

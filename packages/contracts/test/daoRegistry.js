@@ -22,14 +22,6 @@ describe("#daoRegistry", () => {
 
     it("should register new dao success", async function () {
 
-        // const test = ethers.encodeBytes32String("hello")
-
-        // console.log("test -->", test)
-
-        // const sig = await alice.signMessage("hello 123");
-
-        // console.log("sig : ", sig)
-
         await contract.register(
             ethers.encodeBytes32String("MY DAO"),
             ethers.encodeBytes32String("MY ADDRESS"),

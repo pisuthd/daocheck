@@ -3,7 +3,7 @@ pragma circom 2.0.0;
 include "./circomlib/circuits/poseidon.circom";
 include "./circomlib/circuits/mux1.circom";
 
-// borrowed from - https://github.com/couger-inc/cream
+// cloned from - https://github.com/couger-inc/cream
 
 template HashLeftRight() {
     signal input left;
