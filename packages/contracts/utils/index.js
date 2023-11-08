@@ -1,5 +1,7 @@
 const bigintConversion = require('bigint-conversion')
 const { buildPoseidon } = require("circomlibjs")
+const { plonk } = require("snarkjs")
+
 
 exports.encode = (val) => {
     switch (typeof val) {
@@ -33,4 +35,10 @@ exports.hasher = async (items) => {
 
 exports.hashCommitment = async (daoId, secret) => {
     return this.hasher([`${daoId}`, `${secret}`])
+}
+
+exports.proveToProof = async (prove) => {
+    const calldata = await plonk.exportSolidityCallData(prove.proof, prove.publicSignals)
+    const proof = JSON.parse(calldata.substring(0, calldata.indexOf("]") + 1))
+    return proof
 }

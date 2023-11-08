@@ -6,6 +6,8 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 // A public registry to track all legally registered DAOs, where the ID will be mandatory to produce a commitment for an anonymous withdrawal.
 
+// TODO: the production version will use an IPFS hash instead of an increment ID.
+
 contract DAORegistry is ReentrancyGuard {
 
     struct DAO {
@@ -15,7 +17,7 @@ contract DAORegistry is ReentrancyGuard {
         bool isParent;
         uint256 parentId;
         bool discontinued;
-        address representative; // will be using to produce a commitment
+        address representative;
     }
 
     mapping(uint256 => DAO) public gazettes;
