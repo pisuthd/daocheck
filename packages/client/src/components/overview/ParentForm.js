@@ -1,12 +1,14 @@
+import { ArrowRight } from "react-feather"
 import { NumberInput, TextArea, TextInput } from "../Input"
 import { useState, useReducer, useCallback } from "react"
 
 const ParentForm = ({
     errorMessage,
-    name, 
-    address, 
-    jurisdiction, 
-    dutyName, 
+    name,
+    secret,
+    address,
+    jurisdiction,
+    dutyName,
     dutyTiers,
     handleChange,
     handleTier,
@@ -114,9 +116,41 @@ const ParentForm = ({
                     </button>
                 </div>
             </div>
+
+            <div className="px-2 pt-1 my-4 mb-2">
+                <div className="border-b-2 border-gray-600">
+
+                </div>
+            </div>
+
+            {/* SECRET */}
+            <div class="grid grid-cols-5 gap-5 w-full text-black font-medium  ">
+                <div className="col-span-1 flex items-center justify-end mt-1">
+                    Passcode
+                </div>
+                <div className="col-span-3 ">
+                    <TextInput
+                        name={"secret"}
+                        value={secret}
+                        handleChange={handleChange}
+                        placeholder={"DAO Legal Name ex. DAOCheck LLC"}
+                    />
+                </div>
+            </div>
+            <div class="grid grid-cols-5 gap-5 w-full text-black font-medium  ">
+                <div className="col-span-1 flex items-center justify-end mt-1">
+
+                </div>
+                <div className="col-span-3 ">
+                    <p className="text-xs mt-2 text-neutral-600">
+                   This allows you to access financial transactions and withdraw payments belonging to your DAO.
+                    </p>
+                </div>
+            </div>
+
             <div className="py-4 px-2 pb-[6px] mt-2">
-                <button onClick={onCreateWallet} class="bg-black font-bold w-full  py-3 px-8 rounded-md text-white">
-                    Create Wallets
+                <button onClick={onCreateWallet} class="bg-black flex flex-row items-center justify-center font-bold w-full  py-3 px-8 rounded-md text-white">
+                    Next<ArrowRight className="ml-1" />
                 </button>
             </div>
             <div className="w-full max-w-md ml-auto mr-auto">
@@ -126,7 +160,6 @@ const ParentForm = ({
                 <p className="text-xs text-center font-medium text-black">
                     This will create on-chain wallets that belong to your DAO, with a wallet for each tier. Only your account can track transactions and withdraw funds
                 </p>
-
             </div>
         </div>
     )

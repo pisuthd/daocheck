@@ -1,10 +1,12 @@
 
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDown } from 'react-feather'
 import ButtonDropdown from '../ButtonDropdown'
-
-
+import useDAOCheck from '@/hooks/useDAOCheck'
+import { useConnectWallet } from '@web3-onboard/react'
+import DaoItem from './DaoItem'
+import Passcode from '@/modals/Passcode'
 
 const NoDAO = () => (
     <div class="rounded-lg h-[300px] border-2 border-gray-600 flex w-full p-6 py-6 m-1 bg-white ">
@@ -23,29 +25,103 @@ const NoDAO = () => (
     </div>
 )
 
+
 const AllDao = () => {
+
+    const [daos, setDaos] = useState([])
+
+    const [{ wallet }] = useConnectWallet()
+    const { listDAO } = useDAOCheck()
+
+    const [modal, setModal] = useState(false)
+
+    let defaultValue
+
+    try {
+        defaultValue = localStorage && localStorage.getItem("daocheck_passcode") || "SECRET"
+    } catch (error) {
+        console.error(error.message); //raises the error
+    }
+
+    const [passcode, setPasscode] = useState(defaultValue)
+
+    const onSave = (value) => {
+        setPasscode(value)
+        try {
+            value && localStorage.setItem("daocheck_passcode", value)
+        } catch (error) {
+            console.error(error.message); //raises the error
+        }
+
+    }
+
+    useEffect(() => {
+
+        (async () => {
+            if (wallet && wallet.accounts && wallet.accounts[0]) {
+                const account = wallet.accounts[0]
+                const { address } = account
+                const all = await listDAO()
+                const onlyParent = all.filter(item => item.isParent)
+
+                const onlyMe = onlyParent.filter(item => item.owner.toLowerCase() === address.toLowerCase())
+
+                setDaos(onlyMe.map((data) => {
+                    return {
+                        ...data,
+                        childs : all.filter(item => item.parentId === data.daoId)
+                    }
+                }))
+            }
+        })()
+    }, [wallet])
+
+
     return (
+        <>
+        <Passcode
+            visible={modal}
+            close={() => setModal(false)}
+            defaultValue={passcode}
+            onSave={onSave}
+        />
         <div className="ml-auto mr-auto w-full p-2 max-w-4xl mb-20">
+            <div className='flex flex-row'>
+                <ButtonDropdown
+                    title="Setup New..."
+                    items={["Parent DAO", "Child DAO"]}
+                    links={["/new/dao?type=parent", "/new/dao?type=child"]}
+                />
+                <div className="flex pb-1 ml-auto">
+                    <button onClick={() => setModal(true)} className="rounded-md bg-black py-2 mt-auto mb-auto px-8 font-medium text-white ">
+                        Change Passcode
+                    </button>
+                </div>
 
-            <ButtonDropdown
-                title="Setup New..."
-                items={["Parent DAO", "Child DAO"]}
-                links={["/new/dao?type=parent", "/new/dao?type=child"]}
-            />
-            <NoDAO
+            </div>
 
-            />
+            {daos.length === 0 && <NoDAO />}
+
+            {daos.map((item, index) => {
+                return (
+                    <div key={index}>
+                        <DaoItem
+                            passcode={passcode}
+                            {...item}
+                        />
+                    </div>
+
+                )
+            })}
 
             {/* DISCLAIMER */}
 
             <div className='max-w-lg ml-auto mr-auto text-sm mt-4 text-center font-medium text-neutral-600'>
-            You're using a development version that is available only on the zKatana Testnet. Please note that some functions may not work as intended.
+                You're using a development version that is available only on the zKatana Testnet. Please note that some functions may not work as intended.
             </div>
 
-
-
-
         </div>
+        </>
     )
 }
 

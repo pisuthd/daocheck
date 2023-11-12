@@ -35,9 +35,9 @@ const Header = () => {
                         <Link className={`border-b-2 ${pathname.includes("/directory") ? "black border-black  " : "border-transparent hover:black hover:border-black"} mx-1.5 sm:mx-6`} href="/directory">
                             Directory
                         </Link>
-                        <Link className={`border-b-2 ${pathname.includes("/settings") ? "black border-black  " : "border-transparent hover:black hover:border-black"} mx-1.5 sm:mx-6`} href="/settings">
+                        {/* <Link className={`border-b-2 ${pathname.includes("/settings") ? "black border-black  " : "border-transparent hover:black hover:border-black"} mx-1.5 sm:mx-6`} href="/settings">
                             Settings
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
             </div>
