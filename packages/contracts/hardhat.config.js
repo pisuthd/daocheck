@@ -23,6 +23,11 @@ module.exports = {
       chainId: 1261120,
       url: "https://rpc.zkatana.gelato.digital",
       accounts: [PRIVATE_KEY],
+    },
+    shibuya: {
+      chainId: 81,
+      url: "https://evm.shibuya.astar.network",
+      accounts: [PRIVATE_KEY],
     }
   }
 };

@@ -7,6 +7,7 @@ import useDAOCheck from '@/hooks/useDAOCheck'
 import { useConnectWallet } from '@web3-onboard/react'
 import DaoItem from './DaoItem'
 import Passcode from '@/modals/Passcode'
+import WalletDetails from '@/panels/WalletDetails'
 
 const NoDAO = () => (
     <div class="rounded-lg h-[300px] border-2 border-gray-600 flex w-full p-6 py-6 m-1 bg-white ">
@@ -35,6 +36,8 @@ const AllDao = () => {
 
     const [modal, setModal] = useState(false)
 
+    const [walletPanel, setWalletPanel ] = useState()
+
     let defaultValue
 
     try {
@@ -53,6 +56,10 @@ const AllDao = () => {
             console.error(error.message); //raises the error
         }
 
+    }
+
+    const openWallet = (wallet) => {
+        setWalletPanel(wallet)
     }
 
     useEffect(() => {
@@ -79,6 +86,11 @@ const AllDao = () => {
 
     return (
         <>
+        <WalletDetails
+            visible={walletPanel !== undefined}
+            close={() => setWalletPanel(undefined)}
+            walletData={walletPanel}
+        />
         <Passcode
             visible={modal}
             close={() => setModal(false)}
@@ -107,6 +119,7 @@ const AllDao = () => {
                     <div key={index}>
                         <DaoItem
                             passcode={passcode}
+                            openWallet={openWallet}
                             {...item}
                         />
                     </div>
@@ -117,7 +130,7 @@ const AllDao = () => {
             {/* DISCLAIMER */}
 
             <div className='max-w-lg ml-auto mr-auto text-sm mt-4 text-center font-medium text-neutral-600'>
-                You're using a development version that is available only on the zKatana Testnet. Please note that some functions may not work as intended.
+                You're using a development version that is available only on Shibuya Testnet. Please note that some functions may not work as intended.
             </div>
 
         </div>

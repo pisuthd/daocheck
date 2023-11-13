@@ -23,6 +23,7 @@
     "react-dom": "^18",
     "react-feather": "^2.0.10",
     "react-loading-icons": "^1.1.0",
+    "react-qr-code": "^2.0.12",
     "recharts": "^2.9.1",
     "snarkjs": "^0.7.2"
   },

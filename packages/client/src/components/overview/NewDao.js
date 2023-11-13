@@ -74,6 +74,11 @@ const NewDao = () => {
             return
         }
 
+        if (address.length >= 32) {
+            setErrorMessage("Address should not be longer than 32 character")
+            return
+        }
+
         setValues({ parentId : 0 })
 
         setModal(true)
@@ -84,6 +89,11 @@ const NewDao = () => {
 
         if (!name || !address || !jurisdiction || !dutyName || !secret || parentId === 0) {
             setErrorMessage("Some fields are missing")
+            return
+        }
+
+        if (address.length >= 32) {
+            setErrorMessage("Address should not be longer than 32 character")
             return
         }
 

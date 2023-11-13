@@ -3,11 +3,15 @@ import { useConnectWallet } from '@web3-onboard/react'
 import { ethers } from "ethers";
 import DAORegistryABI from "../abi/DAORegistry.json"
 import DAOCheckABI from "../abi/DAOCheck.json"
+import axios from 'axios';
+const { plonk } = require("snarkjs")
+
+import { MerkleTree } from "@/utils/MerkleTree";
 
 import { DAOCHECK_ADDRESS, DAOREGISTRY_ADDRESS } from "../constants"
-import { hashCommitment } from "@/utils";
+import { hashCommitment, proveToProof, encode } from "@/utils";
 
-const ETH_PRICE = 2000
+const ETH_PRICE = 0.08
 
 const useDAOCheck = () => {
 
@@ -62,6 +66,133 @@ const useDAOCheck = () => {
 
     }, [wallet])
 
+    const withdraw = useCallback(async (commitment, passcode, onchainId, amount, dutyAmount) => {
+
+        if (!wallet) {
+            return
+        }
+
+        const address = wallet && wallet.accounts[0] && wallet.accounts[0].address
+
+        const LEVELS = 4
+        const ZERO_VALUE = 0
+
+
+        const provider = new ethers.BrowserProvider(wallet.provider)
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(DAOCHECK_ADDRESS, DAOCheckABI, signer);
+
+        let tree = new MerkleTree(LEVELS, ZERO_VALUE)
+        await tree.init()
+
+        let pathIndex = 0
+
+        let leaves = []
+        for (let i = 0; i < await contract.leafCount(); i++) {
+            leaves.push(await contract.leaves(i))
+            await tree.insert(leaves[i])
+            if (`${leaves[i]}` === commitment) {
+                pathIndex = i
+            }
+        }
+
+        const currentRoot = await contract.root()
+        let proof
+
+        if (currentRoot !== tree.root) {
+
+            if (currentRoot === 0n) {
+                let zeros = []
+                for (let i = 0; i < 24; i++) zeros.push(0n)
+                const tx = await contract.updateRoot(zeros, tree.root)
+                await tx.wait()
+            } else {
+
+                leaves.push(commitment)
+                await tree.insert(commitment)
+
+                const index = leaves.indexOf(commitment)
+
+                console.log("index : ", index)
+
+                const treeOutput = tree.getPathUpdate(index)
+
+                const prove = await plonk.fullProve(
+                    {
+                        root: tree.root,
+                        secret: encode(passcode),
+                        daoId: encode(onchainId),
+                        path_elements: treeOutput[0],
+                        path_index: treeOutput[1],
+                    },
+                    `./circuits/withdraw.wasm`,
+                    `./circuits/withdraw.zkey`
+                )
+
+                proof = await proveToProof(prove)
+
+                const tx = await contract.updateRoot(proof, tree.root)
+                await tx.wait()
+            }
+
+        }
+
+        console.log("committment : ", commitment)
+        console.log("leaves : ", leaves)
+        console.log("pathIndex : ", pathIndex)
+
+        console.log("passcode :", passcode, encode(`${passcode}`))
+        console.log("onchainId : ", onchainId, encode(`${onchainId}`))
+
+        if (!proof) {
+            const treeOutput = tree.getPathUpdate(pathIndex)
+
+            // prove that you know the knowledge
+            const prove = await plonk.fullProve(
+                {
+                    root: tree.root,
+                    secret: encode(`${passcode}`),
+                    daoId: encode(`${onchainId}`),
+                    path_elements: treeOutput[0],
+                    path_index: treeOutput[1],
+                },
+                `./circuits/withdraw.wasm`,
+                `./circuits/withdraw.zkey`
+            )
+
+            proof = await proveToProof(prove)
+
+            console.log("proof : ", proof)
+        }
+
+        if (amount !== "0") {
+            const tx = await contract.withdraw(
+                proof,
+                commitment,
+                amount,
+                address
+            )
+
+            await tx.wait()
+
+            console.log("withdrawn success : ", amount)
+        }
+
+        if (dutyAmount !== "0") {
+
+            const tx = await contract.withdraw(
+                proof,
+                commitment,
+                dutyAmount,
+                address
+            )
+            await tx.wait()
+
+            console.log("withdrawn duty success : ", dutyAmount)
+        }
+
+    }, [wallet])
+
     const listWallet = useCallback(async (daoId, secret) => {
 
         if (!wallet) {
@@ -87,9 +218,11 @@ const useDAOCheck = () => {
             const duty = await contract.duties(commitment)
 
             wallets.push({
+                commitment: `${commitment}`,
+                onchainId: `${daoId}${i}`,
                 address,
                 dutyRate: Number(dutyRate),
-                balance : `${balance}`,
+                balance: `${balance}`,
                 duty: `${duty}`,
                 balanceInUsd: Number(ethers.formatEther(balance)) * ETH_PRICE,
                 dutyInUsd: Number(ethers.formatEther(duty)) * ETH_PRICE
@@ -100,9 +233,17 @@ const useDAOCheck = () => {
 
     }, [wallet])
 
+    const listHistory = useCallback(async (address) => {
+
+        const { data } = await axios.get(`https://blockscout.com/shibuya/api?module=account&action=txlist&address=${address}`)
+
+        const { result } = data
+        return result
+    }, [wallet])
+
     const listDAO = useCallback(async () => {
 
-        const provider = wallet ? new ethers.BrowserProvider(wallet.provider) : new ethers.JsonRpcProvider("https://rpc.startale.com/zkatana")
+        const provider = wallet ? new ethers.BrowserProvider(wallet.provider) : new ethers.JsonRpcProvider("https://evm.shibuya.astar.network")
         const contract = new ethers.Contract(DAOREGISTRY_ADDRESS, DAORegistryABI, provider)
 
         const total = await contract.daoCount()
@@ -128,9 +269,11 @@ const useDAOCheck = () => {
 
     return {
         registerDao,
+        listHistory,
         createWallet,
         listWallet,
-        listDAO
+        listDAO,
+        withdraw
     }
 }
 

@@ -6,7 +6,7 @@ const Protected = ({ children }) => {
 
     const [{ wallet, connecting }] = useConnectWallet()
 
-    if (!wallet || wallet && wallet.chains[0] && wallet.chains[0].id !== "0x133e40" ) {
+    if (!wallet || wallet && wallet.chains[0] && wallet.chains[0].id !== "0x51" ) {
         return (
             <div class="rounded-lg h-[300px] border-2 border-gray-600 ml-auto mr-auto max-w-2xl flex w-full p-6 py-6 m-1 mb-20 bg-white ">
 
@@ -28,16 +28,13 @@ const Protected = ({ children }) => {
                         </div>
                         <div className="col-span-3 flex flex-col font-semibold text-left">
                             <div className="mt-auto">
-                                zKatana Testnet
+                                Shibuya Testnet
                             </div>
                             <div className="text-xs p-0 m-0  text-neutral-600 mb-auto">
-                                Chain ID: 1261120
+                                Chain ID: 81
                             </div> 
                         </div>
-                    </div>
-                    <a href="https://docs.astar.network/docs/build/zkEVM/quickstart" target="_blank" className="text-xs underline my-2 text-neutral-800">
-                        How to connect
-                    </a>
+                    </div> 
                 </div>
             </div>
         )

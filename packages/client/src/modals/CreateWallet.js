@@ -67,8 +67,8 @@ const CreateWallet = ({
             title={parentId === 0 ? "Create On-Chain Wallet" : "Create Wallet for Child DAO" }
         >
             <div className="text-sm max-w-lg font-medium text-neutral-800">
-                { parentId === 0 && "Upon confirmation, we will generate on-chain wallets corresponding to each duty tier for your DAO on zKatana Testnet"}
-                { parentId !== 0 && "Upon confirmation, we will generate on-chain wallets corresponding to each duty tier for your DAO on zKatana Testnet"}
+                { parentId === 0 && "Upon confirmation, we will generate on-chain wallets corresponding to each duty tier for your DAO on Shibuya Testnet"}
+                { parentId !== 0 && "Upon confirmation, we will generate on-chain wallets corresponding to each duty tier for your DAO on Shibuya Testnet"}
             </div>
             <div className="grid grid-cols-8 my-2">
 

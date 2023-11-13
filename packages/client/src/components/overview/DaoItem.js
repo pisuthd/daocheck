@@ -4,12 +4,14 @@ import { useEffect, useState } from "react"
 import { shortAddress } from "@/utils"
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Copy } from "react-feather";
-
+import QRCode from "react-qr-code";
 
 const EachRow = ({
     daoId,
     passcode,
     jurisdiction,
+    openWallet,
+    name
 }) => {
 
     const { listWallet } = useDAOCheck()
@@ -63,8 +65,22 @@ const EachRow = ({
                                 <div className="w-full mt-1 text-xs text-center text-black font-bold">
                                     {template.duty}{` +`}{item.dutyRate / 100}%
                                 </div>
-                                <div className="flex">
-                                    <img src={"/QR-Code.png"} className="w-1/2 mx-auto" />
+                                <div onClick={() => openWallet({
+                                    ...item,
+                                    daoId,
+                                    passcode,
+                                    jurisdiction,
+                                    name
+                                })} className="flex cursor-pointer py-1">
+                                    <div className="w-1/2 ml-auto mr-auto">
+                                        <QRCode
+                                            size={100}
+                                            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                                            value={item.address}
+                                            viewBox={`0 0 256 256`}
+                                        />
+                                    </div>
+                                    {/* <img src={"/QR-Code.png"} className="w-1/2 mx-auto" /> */}
                                 </div>
                                 <div className="text-xs text-center text-black font-bold">
                                     On-chain Address
@@ -98,7 +114,8 @@ const DaoItem = ({
     passcode,
     jurisdiction,
     name,
-    childs
+    childs,
+    openWallet
 }) => {
 
     return (
@@ -110,6 +127,8 @@ const DaoItem = ({
                     daoId={daoId}
                     passcode={passcode}
                     jurisdiction={jurisdiction}
+                    openWallet={openWallet}
+                    name={name}
                 />
 
                 {
@@ -120,6 +139,8 @@ const DaoItem = ({
                                     daoId={dao.daoId}
                                     passcode={passcode}
                                     jurisdiction={dao.jurisdiction}
+                                    openWallet={openWallet}
+                                    name={name}
                                 />
                             </div>
 

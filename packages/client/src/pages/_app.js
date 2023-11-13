@@ -3,13 +3,13 @@ import { Web3OnboardProvider, init } from '@web3-onboard/react'
 import injectedModule from '@web3-onboard/injected-wallets'
 
 
-const zKatana = {
-  id: '0x133E40',
-  token: 'ETH',
-  label: 'zKatana Testnet',
-  rpcUrl: `https://rpc.startale.com/zkatana`
+const shibuya = {
+  id: '0x51',
+  token: 'SBY',
+  label: 'Shibuya Testnet',
+  rpcUrl: `https://evm.shibuya.astar.network`
 }
-const chains = [zKatana]
+const chains = [shibuya]
 const wallets = [injectedModule()]
 
 const web3Onboard = init({
