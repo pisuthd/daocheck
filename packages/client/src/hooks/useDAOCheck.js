@@ -99,6 +99,9 @@ const useDAOCheck = () => {
         const currentRoot = await contract.root()
         let proof
 
+        console.log("on-chain root : ", currentRoot)
+        console.log("current root : ", tree.root)
+
         if (currentRoot !== tree.root) {
 
             if (currentRoot === 0n) {
@@ -108,14 +111,9 @@ const useDAOCheck = () => {
                 await tx.wait()
             } else {
 
-                leaves.push(commitment)
-                await tree.insert(commitment)
+                console.log("index : ", pathIndex)
 
-                const index = leaves.indexOf(commitment)
-
-                console.log("index : ", index)
-
-                const treeOutput = tree.getPathUpdate(index)
+                const treeOutput = tree.getPathUpdate(pathIndex)
 
                 const prove = await plonk.fullProve(
                     {
@@ -166,6 +164,9 @@ const useDAOCheck = () => {
         }
 
         if (amount !== "0") {
+
+            console.log("withdrawing : ", amount)
+
             const tx = await contract.withdraw(
                 proof,
                 commitment,
@@ -179,6 +180,8 @@ const useDAOCheck = () => {
         }
 
         if (dutyAmount !== "0") {
+
+            console.log("withdrawing duty : ", dutyAmount)
 
             const tx = await contract.withdraw(
                 proof,
