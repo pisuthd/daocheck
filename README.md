@@ -2,6 +2,9 @@
 
 DAOCheck is a non-custodial payment gateway for real-world LLC DAO utilizing zk-SNARK and Astar blockchain, created during the [Web3 Global Hackathon 2023](https://key3.eventos.tokyo/web/portal/744/event/7845). The project is on the Shibuya Testnet and live at [https://dev.daocheck.co](https://dev.daocheck.co).
 
+- [YouTube](https://youtu.be/-983lSJsctQ)
+- [Akindo](https://app.akindo.io/communities/La2pLrojPT497x1m/products/q3elgKWB1ikGpMkM)
+
 ## Background
 
 As of now, many countries allow the registration of the DAO, from Singapore, the Marshall Islands to U.S. states like Wyoming (and soon in Japan). Implementing the legal wrapper allows the DAO to receive payments at physical branches, like coffee shops within its jurisdiction and fulfill tax responsibilities. The benefits of doing it right help DAO token holders avoid further legal issues.
